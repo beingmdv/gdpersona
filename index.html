@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Casa De Discussion | Team Persona</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom Font Assignments */
+        .font-heist { font-family: 'Anton', sans-serif; }
+        .font-sub { font-family: 'Oswald', sans-serif; }
+        .font-mono-tech { font-family: 'Share Tech Mono', monospace; }
+
+        /* Animation for falling money */
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Animation for floating masks - slower and more rotation */
+        @keyframes float-mask {
+            0% { transform: translateY(-10vh) rotate(-20deg) scale(0.8); opacity: 0.8; }
+            50% { transform: translateY(50vh) rotate(20deg) scale(1); opacity: 0.6; }
+            100% { transform: translateY(110vh) rotate(-20deg) scale(0.8); opacity: 0; }
+        }
+
+        .money {
+            position: fixed;
+            top: -10%;
+            background-color: #fef2f2; /* red-50 */
+            width: 40px;
+            height: 20px;
+            z-index: 0;
+            opacity: 0.3;
+            animation: fall linear infinite;
+            border: 1px solid #991b1b; /* red-800 */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border-radius: 4px; 
+        }
+
+        .money::before {
+            content: '$';
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            color: #991b1b; /* red-800 */
+            line-height: 20px;
+            font-weight: bold;
+        }
+
+        /* Mask Element Styling */
+        .dali-mask {
+            position: fixed;
+            top: -15%;
+            width: 40px;
+            height: 40px;
+            z-index: 0;
+            opacity: 0.8;
+            animation: float-mask linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+        
+        .dali-mask::after {
+            content: '🎭';
+            display: block;
+        }
+
+        /* Glitch effect on hover for Title */
+        .glitch-hover:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: #dc2626; /* red-600 */
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #18181b; /* zinc-950 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b91c1c; /* red-700 */
+            border-radius: 10px; 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #991b1b; 
+        }
+
+        .mask-overlay {
+            background: radial-gradient(circle at center, transparent 0%, #09090b 95%); /* zinc-950 */
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-gray-200 overflow-x-hidden selection:bg-red-700 selection:text-white">
+
+    <!-- Falling Money & Masks Animation Container -->
+    <div id="rain-container" class="pointer-events-none fixed inset-0 z-0 overflow-hidden"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-zinc-950/90 backdrop-blur-md border-b border-red-900/30 shadow-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-3 group">
+                <!-- Replace 'logo.jpg' with your actual image file path -->
+                <img src="logo.jpeg" onerror="this.style.display='none'" alt="Persona Logo" class="h-12 w-auto object-contain brightness-100  group-hover:brightness-100 group-hover:invert-0 transition-all duration-300">
+                <div class="text-2xl font-heist tracking-widest text-red-600 group-hover:text-red-500 transition-colors drop-shadow-md">
+                    PERSONA
+                </div>
+            </a>
+            <!-- Added google form link to nav button as well -->
+            <a href="https://forms.gle/PJ4BXrAMkt4ViZNj9" target="_blank" class="hidden md:block px-8 py-3 bg-red-700 hover:bg-red-600 text-white font-sub font-bold tracking-wider transition-all rounded-full shadow-lg hover:shadow-red-900/50 border border-red-800">
+                <span>JOIN THE HEIST</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex flex-col justify-center items-center text-center px-4 z-10 pt-20 overflow-hidden">
+        <div class="absolute inset-0 mask-overlay pointer-events-none"></div>
+        
+        <!-- Giant Background Mask Watermark -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center opacity-5 pointer-events-none z-0">
+             <div class="text-[30rem] md:text-[50rem] select-none grayscale opacity-10 text-gray-800">🎭</div>
+        </div>
+
+        <!-- Animated Background Line -->
+        <div class="absolute top-0 w-px h-full bg-gradient-to-b from-transparent via-red-600 to-transparent left-10 opacity-30 hidden md:block"></div>
+        <div class="absolute top-0 w-px h-full bg-gradient-to-b from-transparent via-red-600 to-transparent right-10 opacity-30 hidden md:block"></div>
+
+        <p class="text-red-500 font-mono-tech tracking-[0.3em] mb-4 text-sm md:text-base animate-pulse font-bold relative z-10">GROUP DISCUSSION</p>
+        
+        <h1 class="text-6xl md:text-9xl font-heist text-white mb-2 tracking-tighter uppercase leading-none glitch-hover cursor-default relative z-10 drop-shadow-2xl">
+            LA CASA DE DISCUSSION
+        </h1>
+        
+        <div class="w-24 h-1 bg-red-600 mb-8 relative z-10 shadow-[0_0_10px_rgba(220,38,38,0.8)]"></div>
+
+        <h2 class="text-xl md:text-3xl font-sub font-light max-w-4xl leading-relaxed text-gray-300 relative z-10">
+            "Think like <span class="text-red-500 font-bold">Professor</span>, 
+            Speak like <span class="text-red-500 font-bold">Berlin</span>, 
+            Counter like <span class="text-red-500 font-bold">Tokyo</span>"
+        </h2>
+
+        <p class="mt-6 text-2xl md:text-4xl font-heist text-red-600 tracking-widest relative z-10 drop-shadow-lg uppercase">
+            'No One Wins Alone'
+        </p>
+
+        <!-- Added mb-24 to create spacing after the button -->
+        <div class="mt-12 mb-24 flex flex-col md:flex-row gap-6 relative z-10">
+            <a href="#register" class="px-10 py-4 bg-red-700 text-white font-heist tracking-widest text-xl hover:bg-red-600 transition-colors duration-300 shadow-[0_0_20px_rgba(229,9,20,0.5)] border border-red-500 rounded-full">
+                ENTER THE MINT
+            </a>
+        </div>
+    </header>
+
+    <!-- The Problem (Context) -->
+    <section class="py-20 bg-zinc-900 border-t border-red-900/20 relative z-10">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="w-full md:w-1/2">
+                    <div class="border-l-4 border-red-600 pl-6">
+                        <h3 class="text-4xl font-heist mb-6 text-white uppercase">Are you prepared for the <br><span class="text-red-600">GD Round?</span></h3>
+                        <p class="text-gray-400 font-sub text-lg leading-relaxed mb-6">
+                            Effective communication is the cornerstone of a successful recruitment process. Like a well-executed plan, your words must be precise, calculated, and impactful.
+                        </p>
+                        <p class="text-gray-300 font-sub text-lg leading-relaxed">
+                            <strong class="text-white">La Casa De Discussion</strong> invites you to an exclusive online masterclass, conducted by experienced senior executives who have mastered the art of negotiation and corporate strategy. This is your training ground.
+                        </p>
+                    </div>
+                </div>
+                <!-- Visual Element: Blueprint Style -->
+                <div class="w-full md:w-1/2 relative bg-zinc-800 p-10 rounded-3xl border border-zinc-700 shadow-xl bg-[url('https://www.transparenttextures.com/patterns/blueprint.png')]">
+                    <div class="absolute -top-10 -right-5 transform rotate-12">
+                        <!-- Sticker style mask -->
+                        <div class="text-8xl drop-shadow-xl opacity-90">🎭</div>
+                    </div>
+                    <div class="absolute -top-3 -right-3 text-red-600">
+                        <i data-lucide="crosshair" class="w-12 h-12"></i>
+                    </div>
+                    <h4 class="font-mono-tech text-red-500 mb-4 text-xs font-bold">CONFIDENTIAL // STRATEGY DOC</h4>
+                    <ul class="space-y-4 font-sub text-gray-300">
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="check-circle" class="text-red-600 w-5 h-5"></i>
+                            <span>Simulated Professional Environment</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="check-circle" class="text-red-600 w-5 h-5"></i>
+                            <span>Real-time Performance Analysis</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="check-circle" class="text-red-600 w-5 h-5"></i>
+                            <span>Executive Level Mentorship</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Plan (Objectives) -->
+    <section class="py-24 bg-zinc-950 relative z-10">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-heist text-white mb-4">THE MASTER PLAN</h2>
+                <div class="w-16 h-1 bg-red-600 mx-auto"></div>
+                <p class="mt-4 font-mono-tech text-gray-500">CORE OBJECTIVES</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Objective 1 -->
+                <div class="group relative bg-zinc-900 p-8 border border-zinc-800 hover:border-red-600 transition-all duration-300 shadow-lg hover:shadow-red-900/20 rounded-2xl hover:bg-zinc-800">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                        <i data-lucide="shield" class="w-16 h-16 text-red-600"></i>
+                    </div>
+                    <div class="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center mb-6 group-hover:bg-red-600 transition-colors">
+                        <span class="text-2xl">😇</span>
+                    </div>
+                    <h3 class="text-2xl font-heist text-white mb-3">BUILDING CONFIDENCE</h3>
+                    <p class="text-gray-400 group-hover:text-gray-200 font-sub leading-relaxed transition-colors">
+                        Eliminate hesitation. Learn strategies to remain calm in high-pressure scenarios. Don't let the interrogator break you.
+                    </p>
+                </div>
+
+                <!-- Objective 2 -->
+                <div class="group relative bg-zinc-900 p-8 border border-zinc-800 hover:border-red-600 transition-all duration-300 shadow-lg hover:shadow-red-900/20 rounded-2xl hover:bg-zinc-800">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                        <i data-lucide="trending-up" class="w-16 h-16 text-red-600"></i>
+                    </div>
+                    <div class="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center mb-6 group-hover:bg-red-600 transition-colors">
+                         <span class="text-2xl">📈</span>
+                    </div>
+                    <h3 class="text-2xl font-heist text-white mb-3">ARTICULATE DELIVERY</h3>
+                    <p class="text-gray-400 group-hover:text-gray-200 font-sub leading-relaxed transition-colors">
+                        Enhance clarity and impact. Make every word count. Your speech is your weapon; keep it sharp and precise.
+                    </p>
+                </div>
+
+                <!-- Objective 3 -->
+                <div class="group relative bg-zinc-900 p-8 border border-zinc-800 hover:border-red-600 transition-all duration-300 shadow-lg hover:shadow-red-900/20 rounded-2xl hover:bg-zinc-800">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                        <i data-lucide="mic-2" class="w-16 h-16 text-red-600"></i>
+                    </div>
+                    <div class="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center mb-6 group-hover:bg-red-600 transition-colors">
+                        <span class="text-2xl">🗣️</span>
+                    </div>
+                    <h3 class="text-2xl font-heist text-white mb-3">THOUGHT LEADERSHIP</h3>
+                    <p class="text-gray-400 group-hover:text-gray-200 font-sub leading-relaxed transition-colors">
+                        Structure and express ideas in a public forum. Lead the discussion. Be the Professor in the room.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coordinates (Details) -->
+    <section id="register" class="py-20 bg-red-900/90 relative z-10">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-6xl font-heist text-white mb-8 drop-shadow-md">MISSION LOGISTICS</h2>
+            
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6 max-w-4xl mx-auto mb-12">
+                
+                <div class="bg-zinc-900/80 p-6 w-full md:w-1/3 transform hover:-translate-y-2 transition-transform duration-300 border-2 border-transparent hover:border-white shadow-xl rounded-2xl">
+                    <div class="text-red-500 mb-2 flex justify-center"><i data-lucide="calendar" class="w-8 h-8"></i></div>
+                    <p class="font-mono-tech text-gray-400 text-sm">DATE</p>
+                    <p class="font-heist text-2xl text-white mt-1">[INSERT DATE]</p>
+                </div>
+
+                <div class="bg-zinc-900/80 p-6 w-full md:w-1/3 transform hover:-translate-y-2 transition-transform duration-300 border-2 border-transparent hover:border-white shadow-xl rounded-2xl">
+                    <div class="text-red-500 mb-2 flex justify-center"><i data-lucide="clock" class="w-8 h-8"></i></div>
+                    <p class="font-mono-tech text-gray-400 text-sm">TIME</p>
+                    <p class="font-heist text-2xl text-white mt-1">[INSERT TIME]</p>
+                </div>
+
+                <div class="bg-zinc-900/80 p-6 w-full md:w-1/3 transform hover:-translate-y-2 transition-transform duration-300 border-2 border-transparent hover:border-white shadow-xl rounded-2xl">
+                    <div class="text-red-500 mb-2 flex justify-center"><i data-lucide="video" class="w-8 h-8"></i></div>
+                    <p class="font-mono-tech text-gray-400 text-sm">PLATFORM</p>
+                    <p class="font-heist text-2xl text-white mt-1">ZOOM / MEET</p>
+                </div>
+
+            </div>
+
+            <div class="bg-black/30 p-10 rounded-3xl inline-block backdrop-blur-sm border border-white/10">
+                <p class="font-sub text-xl text-white mb-6 tracking-wide">Take the next step in your professional development. ✨</p>
+                <!-- Updated Button to Link -->
+                <a href="https://forms.gle/PJ4BXrAMkt4ViZNj9" target="_blank" class="inline-block bg-white text-red-800 font-heist text-2xl px-12 py-4 hover:bg-zinc-900 hover:text-white transition-all duration-300 uppercase tracking-widest shadow-[0_0_15px_rgba(255,255,255,0.3)] rounded-full border border-transparent">
+                    <span>Join The Resistance</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-zinc-950 py-12 border-t border-zinc-800 relative z-10">
+        <div class="container mx-auto px-6 flex flex-col items-center">
+            <div class="flex items-center gap-3 mb-4">
+                 <!-- Logo in Footer -->
+                <img src="logo.jpeg" onerror="this.style.display='none'" alt="Persona Logo" class="h-8 w-auto invert-100 opacity-100 grayscale hover:grayscale-0 transition-all">
+                <div class="font-heist text-3xl text-gray-500 tracking-widest">PERSONA</div>
+            </div>
+            <p class="text-gray-500 font-mono-tech text-sm text-center">
+                BELLA CIAO. BELLA CIAO. BELLA CIAO CIAO CIAO.
+            </p>
+            
+            <p class="text-red-600 font-heist tracking-widest mt-8 mb-2">CONTACT US</p>
+
+            <div class="flex gap-4">
+                <a href="https://www.instagram.com/personasoit?igsh=MTV5bXcwdTgxa3Zs" class="text-gray-500 hover:text-red-500 transition-colors"><i data-lucide="instagram"></i></a>
+                <a href="https://www.linkedin.com/company/thepersonasoit/" class="text-gray-500 hover:text-red-500 transition-colors"><i data-lucide="linkedin"></i></a>
+                <a href="#" class="text-gray-500 hover:text-red-500 transition-colors"><i data-lucide="mail"></i></a>
+            </div>
+            <p class="text-zinc-700 text-xs mt-8">© 2024 Club Persona - All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Generate Falling Money and Masks
+        const rainContainer = document.getElementById('rain-container');
+        const itemCount = 25; // Total items
+
+        for(let i = 0; i < itemCount; i++) {
+            // Decide if it's money or a mask (30% chance of mask)
+            const isMask = Math.random() > 0.7;
+            
+            const item = document.createElement('div');
+            item.classList.add(isMask ? 'dali-mask' : 'money');
+            
+            // Random positioning and timing
+            const left = Math.random() * 100;
+            const duration = Math.random() * 5 + 6; // between 6 and 11s
+            const delay = Math.random() * 5; 
+
+            item.style.left = `${left}%`;
+            item.style.animationDuration = `${duration}s`;
+            item.style.animationDelay = `${delay}s`;
+
+            rainContainer.appendChild(item);
+        }
+    </script>
+</body>
+</html>
